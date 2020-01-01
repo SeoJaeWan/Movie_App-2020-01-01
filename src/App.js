@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import "./App.css";
-import Movie from "./Movie";
+import Movie from "./components/Movie";
 import axios from "axios";
 
 const _renderMovie = movies => {

@@ -4,6 +4,7 @@
 }
 
 .Movie {
+  min-width: 500px;
   width: 45%;
   background-color: white;
   margin-bottom: 70px;
@@ -33,10 +34,14 @@ img {
   font-weight: 300;
 }
 
+.Movie_title,
+.Movie_synopsis {
+  color: #2c2c2c;
+}
+
 .Movie_title {
   margin-bottom: 5px;
   font-size: 24px;
-  color: #2c2c2c;
 }
 
 .Movie_genres {
