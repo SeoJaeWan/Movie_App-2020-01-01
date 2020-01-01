@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import "./App.css";
 import Movie from "./components/Movie";
 import axios from "axios";
+import styled, { css } from "styled-components";
 
 const _renderMovie = movies => {
   return movies.map(movie => (
@@ -112,18 +113,47 @@ class App extends Component {
   };
 
   */
+
+  /*
+    휴대폰 레이아웃 설정을 위해서 size, media, AppStyle을 따로 정의하였다
+  */
+
+  sizes = {
+    desktop: 1024,
+    tablet: 768
+  };
+
+  media = Object.keys(this.sizes).reduce((acc, label) => {
+    acc[label] = (...args) => css`
+      @media (max-width: ${this.sizes[label] / 16}em) {
+        ${css(...args)};
+      }
+    `;
+
+    return acc;
+  }, {});
+
+  AppStyle = styled.div`
+    width: 100%;
+    height: 100%;
+    ${this.media.desktop`width: 768px;`}
+    ${this.media.tablet`width: 100%;`}
+    display: flex;
+    justify-content: center;
+  `;
+
   render() {
     const { isLoading, movies } = this.state;
 
     console.log("render now");
     return (
-      <div className="App">
+      <this.AppStyle>
         {isLoading ? (
           <div className="loader">Loading</div>
         ) : (
           <div className="movies">{_renderMovie(movies)}</div>
         )}
-      </div>
+      </this.AppStyle>
     );
   }
 }
