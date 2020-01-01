@@ -1,6 +1,6 @@
 import React from "react";
 import PropsTypes from "prop-types";
-import "./Movie.css";
+import { MovieStyle } from "./MovieStyle.js";
 
 /*
 class Movie extends Component {
@@ -56,7 +56,7 @@ class MoviePoster extends Component{
 */
 function Movie({ title, image, genres, synopsis, rating, year }) {
   return (
-    <div className="Movie">
+    <MovieStyle>
       <div className="Movie_img">
         <img src={image} alt={title} className="Movie_Poster" />;
       </div>
@@ -72,7 +72,7 @@ function Movie({ title, image, genres, synopsis, rating, year }) {
         </p>
         <p className="Movie_synopsis">{synopsis.slice(0, 180)}...</p>
       </div>
-    </div>
+    </MovieStyle>
   );
 }
 
