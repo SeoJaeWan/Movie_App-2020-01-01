@@ -54,23 +54,40 @@ class MoviePoster extends Component{
       </div>
       <h1>{title}</h1>
 */
-function Movie({ title, image, genres, synopsis, rating, year }) {
+function Movie({ title, image, genres, synopsis, year }) {
   return (
     <MovieStyle>
       <div className="Movie_img">
-        <img src={image} alt={title} className="Movie_Poster" />;
+        {image.length > 1 ? (
+          <img src={image} alt={title} className="Movie_Poster" />
+        ) : (
+          <img
+            src={require("../Img/noimg.jpg")}
+            alt="nmoimg"
+            className="Movie_Poster"
+          />
+        )}
+        ;
       </div>
       <div className="Movie_data">
         <h3 className="Movie_title">{title}</h3>
-        <h5 className="Movie_year">
-          {year} 평점 : {rating}
-        </h5>
-        <p className="Movie_genres">
-          {genres.map((genre, index) => (
-            <span className="Movie_Genres">{genre}</span>
-          ))}
+        <h5 className="Movie_year">{year}</h5>
+        <p className="Movie_sub">
+          <span className="Movie_genres">{genres}</span>
+          <span>
+            <a
+              href={
+                "https://search.naver.com/search.naver?sm=tab_sug.top&where=nexearch&query=" +
+                title
+              }
+              target="_Blank"
+              rel="noopener noreferrer"
+            >
+              찾아보기
+            </a>
+          </span>
         </p>
-        <p className="Movie_synopsis">{synopsis.slice(0, 180)}...</p>
+        <p className="Movie_synopsis">{synopsis.slice(0, 120)}...</p>
       </div>
     </MovieStyle>
   );
@@ -79,7 +96,7 @@ function Movie({ title, image, genres, synopsis, rating, year }) {
 Movie.propTypes = {
   title: PropsTypes.string,
   image: PropsTypes.string,
-  genres: PropsTypes.array,
+  genres: PropsTypes.string,
   synopsis: PropsTypes.string
 };
 

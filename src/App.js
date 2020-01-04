@@ -1,19 +1,21 @@
 import React, { Component } from "react";
 import "./App.css";
 import Movie from "./components/Movie";
-import axios from "axios";
 import styled, { css } from "styled-components";
 
 const _renderMovie = movies => {
   return movies.map(movie => (
     <Movie
-      key={movie.id}
-      title={movie.title_english}
-      image={movie.medium_cover_image}
-      genres={movie.genres}
-      synopsis={movie.synopsis}
-      rating={movie.rating}
-      year={movie.year}
+      key={movie.DOCID}
+      title={movie.title}
+      image={
+        movie.posters.indexOf("|") !== -1
+          ? movie.posters.split("|")[0]
+          : movie.posters
+      }
+      genres={movie.genre}
+      synopsis={movie.plot}
+      year={movie.repRlsDate}
     />
   ));
 };
@@ -26,9 +28,13 @@ const _renderMovie = movies => {
 */
 
 class App extends Component {
+  time = new Date();
+
   state = {
     isLoading: true,
-    movies: []
+    movies: [],
+    month: this.time.getMonth() + 1,
+    year: this.time.getFullYear()
   };
 
   componentWillMount() {
@@ -70,15 +76,16 @@ class App extends Component {
     movies : movies를 줄여서 적었다 보면된다
     
   바로 아래 getMoives 함수는 fecth를 사용할떄 쓰는 함수이다
-
+  */
   _getMovies = async () => {
     const movies = await this._callApi();
     console.log(movies);
-    this.setState({
-      movies
-    });
+    movies &&
+      this.setState({
+        movies,
+        isLoading: false
+      });
   };
-  */
 
   /*
   fetch를 사용하려고 했지만 axios를 사용하기로 하였다.
@@ -87,32 +94,45 @@ class App extends Component {
   
   아래처럼 {data: {data:{movies}}}를 하지 않으면 movies를 사용할 때 
   data.data.movies 이렇게 사용해야하기 떄문에 간단하게 하려고 위와같이 작업을 해준다
-  */
+
 
   _getMovies = async () => {
-    const {
-      data: {
-        data: { movies }
-      }
-    } = await axios.get(
-      "https://yts.lt/api/v2/list_movies.json?sort_by=rating"
+    const movies = await axios.get(
+      "http://api.koreafilm.or.kr/openapi-data2/wisenut/search_api/search_json.jsp?collection=kmdb_new&releaseDts=20191201&listCount=50&ServiceKey=FE9MDOS9U5EJ2M761FY1"
     );
 
-    console.log(movies);
+    console.log(movies.data.Data[0].Result);
+    const movie = movies.data.Data[0].Result;
 
-    this.setState({ movies, isLoading: false });
+    console.log(movie);
+
+    this.setState({ movie, isLoading: false });
   };
+ */
   /*
   이것은 fetch를 사용할때의 함수  
-
+  */
   _callApi = () => {
-    return fetch("https://yts.lt/api/v2/list_movies.json?sort_by=rating")
+    console.log(
+      "http://api.koreafilm.or.kr/openapi-data2/wisenut/search_api/search_json.jsp?collection=kmdb_new&type=극영화&releaseDts=" +
+        this.state.year +
+        (this.state.month < 10 ? "0" + this.state.month : this.state.month) +
+        "01&releaseDte=20191231&listCount=500&sort=title&ServiceKey=FE9MDOS9U5EJ2M761FY1"
+    );
+
+    return fetch(
+      "http://api.koreafilm.or.kr/openapi-data2/wisenut/search_api/search_json.jsp?collection=kmdb_new&type=극영화&releaseDts=" +
+        this.state.year +
+        (this.state.month < 10 ? "0" + this.state.month : this.state.month) +
+        "01&releaseDte=" +
+        this.state.year +
+        (this.state.month < 10 ? "0" + this.state.month : this.state.month) +
+        "31&releaseDte=20191231&listCount=500&&sort=prodYear&ServiceKey=FE9MDOS9U5EJ2M761FY1"
+    )
       .then(response => response.json())
-      .then(json => json.data.movies)
+      .then(json => json.Data[0].Result)
       .catch(err => console.log(err));
   };
-
-  */
 
   /*
     휴대폰 레이아웃 설정을 위해서 size, media, AppStyle을 따로 정의하였다
@@ -149,7 +169,9 @@ class App extends Component {
     return (
       <this.AppStyle>
         {isLoading ? (
-          <div className="loader">Loading</div>
+          <div className="loader">
+            <img src={require("./Img/loading.gif")} alt="loading"></img>
+          </div>
         ) : (
           <div className="movies">{_renderMovie(movies)}</div>
         )}
