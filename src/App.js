@@ -1,11 +1,10 @@
 import React, { Component } from "react";
-import "./App.css";
-import Movie from "./components/main/Movie";
+import Movie from "./components/movie";
 import styled, { css } from "styled-components";
-import SelectBar from "./components/select/SelectBar";
+import SelectBar from "./components/select";
 
-const _renderMovie = movies => {
-  return movies.map(movie => (
+const _renderMovie = (movies) => {
+  return movies.map((movie) => (
     <Movie
       className="Movie"
       key={movie.DOCID}
@@ -29,7 +28,7 @@ class App extends Component {
     isLoading: true,
     movies: [],
     month: this.time.getMonth() + 1,
-    year: this.time.getFullYear()
+    year: this.time.getFullYear(),
   };
 
   componentWillMount() {
@@ -46,18 +45,11 @@ class App extends Component {
     movies &&
       this.setState({
         movies,
-        isLoading: false
+        isLoading: false,
       });
   };
 
   _callApi = () => {
-    console.log(
-      "http://api.koreafilm.or.kr/openapi-data2/wisenut/search_api/search_json.jsp?collection=kmdb_new&type=극영화&releaseDts=" +
-        this.state.year +
-        (this.state.month < 10 ? "0" + this.state.month : this.state.month) +
-        "01&releaseDte=20191231&listCount=500&sort=title&ServiceKey=FE9MDOS9U5EJ2M761FY1"
-    );
-
     return fetch(
       "http://api.koreafilm.or.kr/openapi-data2/wisenut/search_api/search_json.jsp?collection=kmdb_new&type=극영화&releaseDts=" +
         this.state.year +
@@ -65,16 +57,16 @@ class App extends Component {
         "01&releaseDte=" +
         this.state.year +
         (this.state.month < 10 ? "0" + this.state.month : this.state.month) +
-        "31&releaseDte=20191231&listCount=500&&sort=prodYear&ServiceKey=FE9MDOS9U5EJ2M761FY1"
+        `31&releaseDte=20191231&listCount=500&&sort=prodYear&ServiceKey=${process.env.REACT_APP_SERVICEKEY}`
     )
-      .then(response => response.json())
-      .then(json => json.Data[0].Result)
-      .catch(err => console.log(err));
+      .then((response) => response.json())
+      .then((json) => json.Data[0].Result)
+      .catch((err) => console.log(err));
   };
 
   sizes = {
     desktop: 1024,
-    tablet: 768
+    tablet: 768,
   };
 
   media = Object.keys(this.sizes).reduce((acc, label) => {
@@ -101,9 +93,10 @@ class App extends Component {
     console.log("render now");
     return (
       <this.AppStyle>
+        {console.log(process.env.REACT_APP_SERVICEKEY)}
         {isLoading ? (
           <div className="loader">
-            <img src={require("./Img/loading.gif")} alt="loading"></img>
+            <img src={require("./assets/img/loading.gif")} alt="loading"></img>
           </div>
         ) : (
           <div className="movies">{_renderMovie(movies)}</div>
