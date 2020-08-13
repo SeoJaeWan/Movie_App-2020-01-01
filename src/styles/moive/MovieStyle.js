@@ -2,7 +2,7 @@ import styled from "styled-components";
 
 export const MovieStyle = styled.div`
   min-width: 480px;
-  width: 45%;
+  width: 40%;
   background-color: white;
   margin-bottom: 70px;
   display: flex;
