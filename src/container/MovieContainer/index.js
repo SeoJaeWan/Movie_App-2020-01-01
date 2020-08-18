@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 
 import Movie from "../../components/movie";
 import { changeField, getMovieInfo } from "../../modules/movie";
+import SelectBar from "../../components/select";
 
 const MovieContainer = () => {
   const dispatch = useDispatch();
@@ -53,7 +54,10 @@ const MovieContainer = () => {
           ></img>
         </div>
       ) : (
-        <div className="movies">{renderMovie()}</div>
+        <>
+          <SelectBar />
+          <div className="movies">{renderMovie()}</div>
+        </>
       )}
     </div>
   );

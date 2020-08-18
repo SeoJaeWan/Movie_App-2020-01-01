@@ -1,11 +1,11 @@
-import { createAction, createHandles, handleActions } from "redux-actions";
+import { createAction, handleActions } from "redux-actions";
 import { takeLatest } from "redux-saga/effects";
 import produce from "immer";
 
-import * as movieAPI from "../../api/moive";
+import * as movieAPI from "../../lib/api/moive";
 import createRequestSaga, {
   createRequestActionTypes,
-} from "../../api/createRequestSaga";
+} from "../../lib/createRequestSaga";
 
 const CHANGE_FILED = "movie/CHANGE_FILED";
 const [

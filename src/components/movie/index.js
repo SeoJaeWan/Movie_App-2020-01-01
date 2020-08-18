@@ -1,6 +1,6 @@
 import React from "react";
 import PropsTypes from "prop-types";
-import { MovieStyle } from "../../styles/moive/MovieStyle.js";
+import { MovieStyle } from "./MovieStyle.js";
 
 const Movie = ({ title, image, genres, synopsis, year }) => {
   return (
